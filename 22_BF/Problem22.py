@@ -1,10 +1,19 @@
 #had to import for system.maxsize as float("inf") wasnt working for the problem
 import sys
 
+#get user input file and format it for use in the problem
+with open('rosalind_bf.txt') as file:
+    vertices, edges = map(int, file.readline().strip().split(" "))
+    graph = {x:{} for x in range(1, vertices + 1)}
+    for line in file:
+        vertex1, vertex2, weight = map(int, line.strip().split(" "))
+        graph[vertex1][vertex2] = weight
+
+
 def Algorithm(graph, vertex, start):
     distance = {i:sys.maxsize for i in graph}
     distance[start] = 0
-    last = 0
+    last =  {i:None for i in graph}
 
     #check all edges
     for i in range(vertex - 1):
@@ -26,28 +35,13 @@ def Algorithm(graph, vertex, start):
                         print("negative")
         
         return distance, last
- 
-def main():
-    #get user input file and format it for use in the problem
-    with open('rosalind_bf.txt') as file:
-        vertices, edges = map(int, file.readline().strip().split(" "))
-        graph = {x:{} for x in range(0, vertices)}
-        for line in file:
-            vertex1, vertex2, weight = map(int, line.strip().split(" "))
-            graph[vertex1][vertex2] = weight
-    #test to verify that the first line is properly grabbed
-    #print(vertices, edges)
-    print(graph)
     
-    #call algorithm
-    distance, last = Algorithm(graph, vertices, 1)
+#call algorithm
+distance, last = Algorithm(graph, vertices, 1)
 
-    #print answers
-    for i in graph:
-        if distance[i] != sys.maxsize:
-            print("x")
-        else: 
-            print(distance[i])
-            
-if __name__ == '__main__':
-        main()
+#print answers
+for i in graph:
+    if distance[i] == sys.maxsize:
+        print("x")
+    else: 
+        print(distance[i])
